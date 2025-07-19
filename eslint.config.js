@@ -1,60 +1,44 @@
-import js from '@eslint/js'
 import tseslint from 'typescript-eslint'
+import js from '@eslint/js'
 import prettier from 'eslint-config-prettier'
-import reactPlugin from 'eslint-plugin-react'
-import importPlugin from 'eslint-plugin-import'
 
-export default await tseslint.config([
+export default [
+  js.configs.recommended,
+  prettier,
+
   {
-    name: 'root-config',
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ['./webapp/**/*.{ts,tsx}'],
     languageOptions: {
+      parser: tseslint.parser,
       parserOptions: {
-        project: ['./backend/tsconfig.json', './webapp/tsconfig.json'],
+        project: './webapp/tsconfig.app.json',
+        tsconfigRootDir: new URL('.', import.meta.url),
       },
     },
     plugins: {
-      react: reactPlugin,
-      import: importPlugin,
+      '@typescript-eslint': tseslint.plugin,
     },
     rules: {
-      // Base
-      ...js.configs.recommended.rules,
-      ...tseslint.configs.recommendedTypeChecked[0].rules,
-
-      // Style
-      'no-console': ['error', { allow: ['info', 'warn', 'error'] }],
+      'no-console': ['error', { allow: ['warn', 'error', 'info'] }],
       curly: ['error', 'all'],
-      'import/order': [
-        'error',
-        {
-          alphabetize: { order: 'asc', caseInsensitive: false },
-          'newlines-between': 'always',
-        },
-      ],
-
-      // TS-specific
-      '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'as' }],
-
-      // React overrides
-      'react/react-in-jsx-scope': 'off', // React 17+
-      'react/jsx-uses-react': 'off',
     },
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
-    extends: [js.configs.recommended, ...tseslint.configs.recommendedTypeChecked, prettier],
   },
 
-  // Optional override: Vite config or Node-specific files
   {
-    files: ['webapp/vite.config.ts'],
+    files: ['./backend/**/*.{ts,tsx}'],
     languageOptions: {
+      parser: tseslint.parser,
       parserOptions: {
-        project: './webapp/tsconfig.node.json',
+        project: './backend/tsconfig.json',
+        tsconfigRootDir: new URL('.', import.meta.url),
       },
     },
+    plugins: {
+      '@typescript-eslint': tseslint.plugin,
+    },
+    rules: {
+      'no-console': ['error', { allow: ['warn', 'error', 'info'] }],
+      curly: ['error', 'all'],
+    },
   },
-])
+]
