@@ -1,0 +1,26 @@
+{
+  "name": "@ideanick/backend",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "ts-node-dev --rs src/index.ts",
+    "build": "rimraf ./dist && tsc --build tsconfig.json",
+    "start": "node dist/index.js",
+    "prettify": "prettier --log-level warn --cache --write '{src/**/*,*}.{ts,tsx,js,json,yml,scss}'",
+    "types": "tsc --noEmit --project tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/node": "^24.0.13",
+    "prettier": "^3.6.2",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "-": "^0.0.1",
+    "@trpc/server": "^11.4.3",
+    "cors": "^2.8.5"
+  }
+}
